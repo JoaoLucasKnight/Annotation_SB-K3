@@ -17,16 +17,22 @@ class JWTUtil(
 
     private val expiration: Long = 60000
 
-    @Value("\${jwt.secret}")
+
+    @Value("\${jwt.secret}")  // apllication.yml
     private lateinit var secret: String
 
-    fun generateToken(username: String, authorities: MutableCollection<out GrantedAuthority>): String? {
+    fun generateToken(
+        username: String,
+        authorities: MutableCollection<out GrantedAuthority>
+    ): String? {
+
         return Jwts.builder()
-            .setSubject(username)
+            .setSubject(username)    // a qual a referecia do token
             .claim("role", authorities)
-            .setExpiration(Date(System.currentTimeMillis() + expiration))
-            .signWith(SignatureAlgorithm.HS512, secret.toByteArray())
+            .setExpiration(Date(System.currentTimeMillis() + expiration)) // tempo de expiração
+            .signWith(SignatureAlgorithm.HS512, secret.toByteArray())   //
             .compact()
+
     }
 
     fun isValid(jwt: String?): Boolean {
